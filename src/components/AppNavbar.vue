@@ -5,7 +5,7 @@
       <img :src="'./icons/menu.svg'" alt="Menu icon"/>
     </button>
     <div id="drawer" class="fixed left-0 bottom-h-screen z-40 bg-slate-800 w-full flex flex-row duration-500">
-      <a class="w-full p-3 text-center text-slate-100 font-semibold" href="#">Arduino Configuration</a>
+      <router-link to="/arduino-configuration" class="w-full p-3 text-center text-slate-100 font-semibold" href="#">Arduino Configuration</router-link>
     </div>
   </div>
 </template>

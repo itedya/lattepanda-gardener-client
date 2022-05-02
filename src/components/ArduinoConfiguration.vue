@@ -1,9 +1,9 @@
 <template>
-  <div class="p-5">
+  <div class="p-5 flex flex-col gap-2">
     <table class="rounded-xl bg-slate-800 w-full">
       <thead>
       <tr>
-        <th class="p-3 text-gray-200 text-left">Nazwa konfiguracji</th>
+        <th class="p-3 text-gray-200 text-left">Configuration name</th>
         <th></th>
       </tr>
       </thead>
@@ -20,19 +20,30 @@
           </button>
         </td>
       </tr>
+      <tr v-if="configurations.length === 0">
+        <td colspan="2" class="p-3 font-semibold text-white text-center">No configurations</td>
+      </tr>
       </tbody>
     </table>
+
+    <div class="w-full flex justify-end">
+      <button class="px-3 py-2 bg-green-500 rounded-xl hover:bg-green-600 duration-300 flex flex-row gap-2 text-white font-semibold">
+        <img :src="'./icons/plus.svg'" alt="Add icon" />
+        Add configuration
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 export default {
   setup() {
-    const configurations = ref([]);
+    const configurations = computed(() => []);
+    const loading = ref(true);
 
-    return { configurations };
+    return {configurations};
   }
 }
 </script>

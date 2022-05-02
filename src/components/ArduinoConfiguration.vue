@@ -52,6 +52,8 @@ export default {
     const configurations = computed(() => []);
     const loading = ref(true);
 
+    // todo: implement loading screen
+
     SerialportStore.fetch()
         .then(() => loading.value = false);
 

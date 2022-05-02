@@ -1,0 +1,29 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @apply bg-gray-800 bg-opacity-40;
+
+  z-index: 60;
+}
+
+.modal-content {
+  @apply bg-gray-800 p-5;
+
+  width: 100%;
+  max-width: 300px;
+
+  @apply rounded-xl;
+
+  display: flex;
+  flex-direction: column;
+  @apply gap-2;
+}

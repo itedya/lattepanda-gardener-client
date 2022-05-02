@@ -2,7 +2,7 @@ import {ref} from "vue";
 import SerialportDto from "../dto/serialport.dto";
 import api from "../api/api";
 
-export class SerialportStore {
+export default class SerialportStore {
     private static data = ref<SerialportDto[]>();
 
     public static fetch(): Promise<SerialportDto[]> {

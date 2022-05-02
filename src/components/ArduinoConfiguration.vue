@@ -1,5 +1,5 @@
 <template>
-  <CreateArduinoConfiguration/>
+  <CreateArduinoConfiguration />
 
   <div class="p-5 flex flex-col gap-2">
     <table class="rounded-xl bg-slate-800 w-full">
@@ -30,7 +30,7 @@
 
     <div class="w-full flex justify-end">
       <button @click="openCreateModal"
-          class="px-3 py-2 bg-green-500 rounded-xl hover:bg-green-600 duration-300 flex flex-row gap-2 text-white font-semibold">
+              class="px-3 py-2 bg-green-500 rounded-xl hover:bg-green-600 duration-300 flex flex-row gap-2 text-white font-semibold">
         <img :src="'./icons/plus.svg'" alt="Add icon"/>
         Add configuration
       </button>
@@ -39,10 +39,11 @@
 </template>
 
 <script>
-import CreateArduinoConfiguration from "./ArduinoConfiguration/CreateArduinoConfiguration";
-import {computed, onMounted, ref} from "vue";
-import {SerialportStore} from "../store/serialport.store";
+import CreateArduinoConfiguration from "./ArduinoConfiguration/CreateArduinoConfiguration.vue";
+import {computed, ref} from "vue";
 import useEventBus from "../composables/mitt";
+import SerialportStore from "../store/serialport.store";
+import ArduinoConfigurationStore from "../store/arduino-configuration.store";
 
 export default {
   components: {CreateArduinoConfiguration},
@@ -54,8 +55,10 @@ export default {
 
     // todo: implement loading screen
 
-    SerialportStore.fetch()
-        .then(() => loading.value = false);
+    Promise.all([
+      ArduinoConfigurationStore.fetch(),
+      SerialportStore.fetch()
+    ]).then(() => loading.value = false);
 
     const openCreateModal = () => {
       eventBus.emit("create-arduino-configuration:modal:show", null);

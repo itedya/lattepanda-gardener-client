@@ -17,7 +17,7 @@
       </div>
 
       <div class="flex justify-end">
-        <button class="btn btn-success">
+        <button class="btn btn-success" @click="submitForm">
           <img :src="'./icons/plus.svg'" alt="Plus icon">
           Add configuration
         </button>
@@ -28,27 +28,38 @@
 
 <script lang="ts">
 import {computed, onMounted, ref} from "vue";
-import {SerialportStore} from "../../store/serialport.store";
+import SerialportStore from "../../store/serialport.store";
 import useEventBus from "../../composables/mitt";
 import useModal from "../../composables/modal";
+import CreateArduinoConfigurationRequest from "../../dto/create-arduino-configuration.request";
+import ArduinoConfigurationStore from "../../store/arduino-configuration.store";
 
 export default {
   setup() {
     const eventBus = useEventBus();
     const ports = computed(() => SerialportStore.all());
-    const comPort = ref();
-    const name = ref();
+    const comPort = ref<string>();
+    const name = ref<string>();
     const modalElement = ref<HTMLDivElement | null>(null);
+    let openModal: () => void;
+    let closeModal: () => void;
 
+    const submitForm = () => {
+      const request = new CreateArduinoConfigurationRequest({name: name.value, serialport: comPort.value});
+
+      ArduinoConfigurationStore.create(request);
+
+      closeModal();
+    }
 
     onMounted(() => {
       if (modalElement.value === null) throw new Error("Modal is null!");
-      const {openModal} = useModal(modalElement.value, "create-arduino-configuration");
+      ({openModal, closeModal} = useModal(modalElement.value, "create-arduino-configuration"));
 
       eventBus.on("create-arduino-configuration:modal:show", openModal);
     });
 
-    return {comPort, ports, modalElement, name};
+    return {comPort, ports, modalElement, name, submitForm};
   }
 }
 </script>

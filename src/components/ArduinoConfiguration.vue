@@ -1,4 +1,6 @@
 <template>
+  <CreateArduinoConfiguration/>
+
   <div class="p-5 flex flex-col gap-2">
     <table class="rounded-xl bg-slate-800 w-full">
       <thead>
@@ -27,8 +29,9 @@
     </table>
 
     <div class="w-full flex justify-end">
-      <button class="px-3 py-2 bg-green-500 rounded-xl hover:bg-green-600 duration-300 flex flex-row gap-2 text-white font-semibold">
-        <img :src="'./icons/plus.svg'" alt="Add icon" />
+      <button @click="openCreateModal"
+          class="px-3 py-2 bg-green-500 rounded-xl hover:bg-green-600 duration-300 flex flex-row gap-2 text-white font-semibold">
+        <img :src="'./icons/plus.svg'" alt="Add icon"/>
         Add configuration
       </button>
     </div>
@@ -36,14 +39,27 @@
 </template>
 
 <script>
-import {computed, ref} from "vue";
+import CreateArduinoConfiguration from "./ArduinoConfiguration/CreateArduinoConfiguration";
+import {computed, onMounted, ref} from "vue";
+import {SerialportStore} from "../store/serialport.store";
+import useEventBus from "../composables/mitt";
 
 export default {
+  components: {CreateArduinoConfiguration},
+
   setup() {
+    const eventBus = useEventBus();
     const configurations = computed(() => []);
     const loading = ref(true);
 
-    return {configurations};
+    SerialportStore.fetch()
+        .then(() => loading.value = false);
+
+    const openCreateModal = () => {
+      eventBus.emit("create-arduino-configuration:modal:show", null);
+    }
+
+    return {configurations, openCreateModal};
   }
 }
 </script>

@@ -3,7 +3,7 @@ import SerialportDto from "../dto/serialport.dto";
 import api from "../api/api";
 
 export class SerialportStore {
-    private static data = ref<SerialportDto>();
+    private static data = ref<SerialportDto[]>();
 
     public static fetch(): Promise<SerialportDto[]> {
         return api.get(`/serialport`)

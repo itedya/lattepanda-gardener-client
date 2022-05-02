@@ -5,7 +5,7 @@ import api from "../api/api";
 export class SerialportStore {
     private static data = ref<SerialportDto>();
 
-    private static fetch(): Promise<SerialportDto[]> {
+    public static fetch(): Promise<SerialportDto[]> {
         return api.get(`/serialport`)
             .then(res => {
                 const newData = res.data.map((ele: Partial<SerialportDto>) => new SerialportDto(ele));
@@ -14,7 +14,7 @@ export class SerialportStore {
             });
     }
 
-    private static all() {
+    public static all() {
         return this.data.value;
     }
 }

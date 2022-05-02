@@ -4,10 +4,16 @@
       <h1 class="text-xl font-semibold text-gray-200">Create arduino config</h1>
 
       <div class="flex flex-col w-full">
-        <label class="input-label">Communication port</label>
-        <select v-model="comPort" class="rounded p-2 focus:outline-none bg-gray-700 text-gray-100 font-medium">
-          <option v-for="serialport in ports" :value="serialport.path">{{ serialport.friendlyName }}</option>
-        </select>
+        <div class="input-container">
+          <label class="input-label">Config name</label>
+          <input type="text" class="input" v-model="name"/>
+        </div>
+        <div class="input-container">
+          <label class="input-label">Communication port</label>
+          <select v-model="comPort" class="input">
+            <option v-for="serialport in ports" :value="serialport.path">{{ serialport.friendlyName }}</option>
+          </select>
+        </div>
       </div>
 
       <div class="flex justify-end">
@@ -31,27 +37,18 @@ export default {
     const eventBus = useEventBus();
     const ports = computed(() => SerialportStore.all());
     const comPort = ref();
+    const name = ref();
     const modalElement = ref<HTMLDivElement | null>(null);
 
 
     onMounted(() => {
       if (modalElement.value === null) throw new Error("Modal is null!");
-      const { openModal } = useModal(modalElement.value, "create-arduino-configuration");
+      const {openModal} = useModal(modalElement.value, "create-arduino-configuration");
 
       eventBus.on("create-arduino-configuration:modal:show", openModal);
     });
 
-    return {comPort, ports, modalElement};
+    return {comPort, ports, modalElement, name};
   }
 }
 </script>
-
-<style lang="scss">
-
-
-.input-label {
-  @apply font-semibold;
-  @apply text-gray-100;
-}
-
-</style>

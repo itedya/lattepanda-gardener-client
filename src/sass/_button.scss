@@ -18,3 +18,8 @@
   @apply bg-green-500 focus:bg-green-600;
   @apply text-gray-100;
 }
+
+.btn-danger {
+  @apply bg-red-500 focus:bg-red-600;
+  @apply text-gray-100;
+}

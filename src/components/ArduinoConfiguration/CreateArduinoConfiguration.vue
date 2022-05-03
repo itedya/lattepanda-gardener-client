@@ -14,6 +14,20 @@
             <option v-for="serialport in ports" :value="serialport.path">{{ serialport.friendlyName }}</option>
           </select>
         </div>
+        <div class="input-container" v-for="(pinout, i) in pinoutManager.pinouts" :key="i">
+          <hr class="my-3"/>
+          <h3 class="text-gray-200 text-2xl font-semibold">Pinout {{ i + 1 }}</h3>
+          <SelectSensorPin v-model="pinout.sensorPin"/>
+          <div class="flex justify-end">
+            <button class="btn btn-danger" @click="pinoutManager.removePinout(i)">Remove pinout</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full flex justify-end">
+        <button class="btn btn-success" @click="pinoutManager.addPinout({})">
+          Add pinout
+        </button>
       </div>
 
       <div class="flex justify-end">
@@ -33,19 +47,32 @@ import useEventBus from "../../composables/mitt";
 import useModal from "../../composables/modal";
 import CreateArduinoConfigurationRequest from "../../dto/create-arduino-configuration.request";
 import ArduinoConfigurationStore from "../../store/arduino-configuration.store";
+import usePinouts from "../../composables/pinout";
+import SelectSensorPin from "./SelectSensorPin.vue";
 
 export default {
+  components: {SelectSensorPin},
+
   setup() {
     const eventBus = useEventBus();
     const ports = computed(() => SerialportStore.all());
+
+    // form data
     const comPort = ref<string>();
     const name = ref<string>();
+    const pinoutManager = usePinouts();
+
+    // modal
     const modalElement = ref<HTMLDivElement | null>(null);
     let openModal: () => void;
     let closeModal: () => void;
 
     const submitForm = () => {
-      const request = new CreateArduinoConfigurationRequest({name: name.value, serialport: comPort.value});
+      const request = new CreateArduinoConfigurationRequest({
+        name: name.value,
+        serialport: comPort.value,
+        pinouts: pinoutManager.pinouts
+      });
 
       ArduinoConfigurationStore.create(request);
 
@@ -59,7 +86,7 @@ export default {
       eventBus.on("create-arduino-configuration:modal:show", openModal);
     });
 
-    return {comPort, ports, modalElement, name, submitForm};
+    return {comPort, ports, modalElement, name, submitForm, pinoutManager};
   }
 }
 </script>
